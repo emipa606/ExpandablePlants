@@ -1,0 +1,91 @@
+using System.Collections.Generic;
+using RimWorld;
+using Verse;
+using Verse.AI;
+
+namespace ExpandablePlants;
+
+internal class JobDriver_PlantSow : JobDriver
+{
+    private const TargetIndex plantTargetIndex = TargetIndex.A;
+
+    private float sowWorkDone;
+
+    private RimWorld.Plant Plant => job.GetTarget(plantTargetIndex).Thing as RimWorld.Plant;
+
+    public override void ExposeData()
+    {
+        base.ExposeData();
+        Scribe_Values.Look(ref sowWorkDone, "sowWorkDone");
+    }
+
+    public override bool TryMakePreToilReservations(bool errorOnFailed)
+    {
+        var plantTarget = job.targetA;
+        return pawn.Reserve(plantTarget, job);
+    }
+
+    protected override IEnumerable<Toil> MakeNewToils()
+    {
+        yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.Touch)
+            .FailOn(() => PlantUtility.AdjacentSowBlocker(job.plantDefToSow, TargetA.Cell, Map) != null)
+            .FailOn(() => !job.plantDefToSow.CanEverPlantAt(TargetLocA, Map));
+
+        var sowToil = new Toil();
+        sowToil.initAction = delegate
+        {
+            TargetThingA = GenSpawn.Spawn(job.plantDefToSow, TargetLocA, Map);
+            pawn.Reserve(TargetThingA, sowToil.actor.CurJob);
+            var plant = (RimWorld.Plant)TargetThingA;
+            plant.Growth = 0f;
+            plant.sown = true;
+        };
+        sowToil.tickAction = delegate
+        {
+            var actor = sowToil.actor;
+            actor.skills?.Learn(SkillDefOf.Plants, 0.085f);
+
+            var workSpeedStat = actor.GetStatValue(StatDefOf.PlantWorkSpeed);
+
+            var plant = Plant;
+            if (plant.LifeStage != PlantLifeStage.Sowing)
+            {
+                Log.Error($"{this} getting sowing work while not in Sowing life stage.");
+            }
+
+            sowWorkDone += workSpeedStat;
+            if (sowWorkDone < plant.def.plant.sowWork)
+            {
+                return;
+            }
+
+            plant.Growth = 0.05f;
+            Map.mapDrawer.MapMeshDirty(plant.Position, MapMeshFlag.Things);
+            actor.records.Increment(RecordDefOf.PlantsSown);
+            ReadyForNextToil();
+        };
+
+        sowToil.defaultCompleteMode = ToilCompleteMode.Never;
+        sowToil.FailOnDespawnedNullOrForbidden(TargetIndex.A);
+        sowToil.FailOnCannotTouch(TargetIndex.A, PathEndMode.Touch);
+        sowToil.WithEffect(EffecterDefOf.Sow, TargetIndex.A);
+        sowToil.WithProgressBar(TargetIndex.A, () => sowWorkDone / Plant.def.plant.sowWork, true);
+        sowToil.PlaySustainerOrSound(() => SoundDefOf.Interact_Sow);
+
+        sowToil.AddFinishAction(delegate
+        {
+            if (TargetThingA == null)
+            {
+                return;
+            }
+
+            var plant = (RimWorld.Plant)sowToil.actor.CurJob.GetTarget(TargetIndex.A).Thing;
+            if (sowWorkDone < plant.def.plant.sowWork && !TargetThingA.Destroyed)
+            {
+                TargetThingA.Destroy();
+            }
+        });
+        sowToil.activeSkill = () => SkillDefOf.Plants;
+        yield return sowToil;
+    }
+}
