@@ -6,8 +6,12 @@
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <DebugType>None</DebugType>
     <LangVersion>latest</LangVersion>
-    <FileVersion>1.4.0</FileVersion>
+    <FileVersion>1.4.1</FileVersion>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="JobDriver_PlantSow.cs.bak" />
+    <None Remove="WorkGiver_GrowerSow.cs.bak" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Krafs.Rimworld.Ref">
       <Version>*</Version>
@@ -18,5 +22,10 @@
       <Version>*</Version>
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
+    <PackageReference Include="Krafs.Publicizer" Version="*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <Publicize Include="Assembly-CSharp" />
   </ItemGroup>
 </Project>

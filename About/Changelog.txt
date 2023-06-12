@@ -1,5 +1,8 @@
 # Changelog for ExpandablePlants
 
+1.4.1 - Replaced the override of vanilla defs with some harmony-patches instead. Thanks Taranchuk for the info and example! Should be more compatible now.
+
+
 1.4.0 - First publish.
 Used DeepL to update translations for ChineseSimplified, French, German, Russian
 

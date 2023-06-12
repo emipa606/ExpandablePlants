@@ -17,7 +17,7 @@ internal class WorkGiver_GrowerSow : WorkGiver_Grower
         CantSowCavePlantBecauseUnroofedTrans = "CantSowCavePlantBecauseUnroofed".Translate();
     }
 
-    protected override bool ExtraRequirements(IPlantToGrowSettable settable, Pawn pawn)
+    public override bool ExtraRequirements(IPlantToGrowSettable settable, Pawn pawn)
     {
         if (!settable.CanAcceptSowNow())
         {

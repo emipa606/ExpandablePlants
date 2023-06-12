@@ -10,16 +10,16 @@ internal class Plant : RimWorld.Plant
 {
     private const float maxTempSpeedFactor = 1f;
 
-    private static readonly float LeafSpawnRadius = 0.4f;
-    private static readonly float LeafSpawnYMin = 0.3f;
-    private static readonly float LeafSpawnYMax = 1f;
+    private new static readonly float LeafSpawnRadius = 0.4f;
+    private new static readonly float LeafSpawnYMin = 0.3f;
+    private new static readonly float LeafSpawnYMax = 1f;
 
-    private string cachedLabelMouseover;
+    private new string cachedLabelMouseover;
 
     private CompPlant compPropertiesPlantExpandable;
 
     // Temperature ranges.
-    public virtual float MinLeaflessTemperature => CompPlant.MinLeaflessTemperature; // -10f
+    public new virtual float MinLeaflessTemperature => CompPlant.MinLeaflessTemperature; // -10f
     public new virtual float MaxLeaflessTemperature => CompPlant.MaxLeaflessTemperature; // -2f
     public new virtual float MinGrowthTemperature => CompPlant.MinGrowthTemperature; // 0f
     public new virtual float MinOptimalGrowthTemperature => CompPlant.MinOptimalGrowthTemperature; // 10f
@@ -152,7 +152,7 @@ internal class Plant : RimWorld.Plant
         }
     }
 
-    protected override float LeaflessTemperatureThresh
+    public override float LeaflessTemperatureThresh
     {
         get
         {
@@ -161,7 +161,7 @@ internal class Plant : RimWorld.Plant
         }
     }
 
-    protected override bool Resting
+    public override bool Resting
     {
         get
         {
@@ -278,6 +278,11 @@ internal class Plant : RimWorld.Plant
     public override void TickLong()
     {
         CheckTemperatureDieOfHeat();
+        if (Destroyed)
+        {
+            return;
+        }
+
         CheckMakeLeafless();
         if (Destroyed)
         {
