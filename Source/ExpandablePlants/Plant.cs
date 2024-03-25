@@ -10,16 +10,16 @@ internal class Plant : RimWorld.Plant
 {
     private const float maxTempSpeedFactor = 1f;
 
-    private new static readonly float LeafSpawnRadius = 0.4f;
-    private new static readonly float LeafSpawnYMin = 0.3f;
-    private new static readonly float LeafSpawnYMax = 1f;
+    private static readonly float LeafSpawnRadius = 0.4f;
+    private static readonly float LeafSpawnYMin = 0.3f;
+    private static readonly float LeafSpawnYMax = 1f;
 
-    private new string cachedLabelMouseover;
+    private string cachedLabelMouseover;
 
     private CompPlant compPropertiesPlantExpandable;
 
     // Temperature ranges.
-    public new virtual float MinLeaflessTemperature => CompPlant.MinLeaflessTemperature; // -10f
+    public virtual float MinLeaflessTemperature => CompPlant.MinLeaflessTemperature; // -10f
     public new virtual float MaxLeaflessTemperature => CompPlant.MaxLeaflessTemperature; // -2f
     public new virtual float MinGrowthTemperature => CompPlant.MinGrowthTemperature; // 0f
     public new virtual float MinOptimalGrowthTemperature => CompPlant.MinOptimalGrowthTemperature; // 10f
@@ -152,7 +152,7 @@ internal class Plant : RimWorld.Plant
         }
     }
 
-    public override float LeaflessTemperatureThresh
+    protected override float LeaflessTemperatureThresh
     {
         get
         {
@@ -161,7 +161,7 @@ internal class Plant : RimWorld.Plant
         }
     }
 
-    public override bool Resting
+    protected override bool Resting
     {
         get
         {
@@ -304,7 +304,7 @@ internal class Plant : RimWorld.Plant
             if ((!wasMature && LifeStage == PlantLifeStage.Mature ||
                  (int)(oldGrowthInt * 10f) != (int)(growthInt * 10f)) && CurrentlyCultivated())
             {
-                Map.mapDrawer.MapMeshDirty(Position, MapMeshFlag.Things);
+                Map.mapDrawer.MapMeshDirty(Position, MapMeshFlagDefOf.Things);
             }
         }
 

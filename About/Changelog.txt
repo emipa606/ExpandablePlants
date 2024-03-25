@@ -1,5 +1,8 @@
 # Changelog for ExpandablePlants
 
+1.5.0 - Mod updated for 1.5 and passed autotests
+
+
 1.4.1 - Replaced the override of vanilla defs with some harmony-patches instead. Thanks Taranchuk for the info and example! Should be more compatible now.
 
 
