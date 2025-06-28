@@ -9,9 +9,9 @@ namespace ExpandablePlants;
 [HarmonyPatch(typeof(PlantProperties), "SpecialDisplayStats")]
 public static class PlantProperties_SpecialDisplayStats
 {
-    public static string OldMinGrowthTemperatureEntryLabel => "MinGrowthTemperature".Translate().CapitalizeFirst();
+    private static string OldMinGrowthTemperatureEntryLabel => "MinGrowthTemperature".Translate().CapitalizeFirst();
 
-    public static string OldMaxGrowthTemperatureEntryLabel => "MaxGrowthTemperature".Translate().CapitalizeFirst();
+    private static string OldMaxGrowthTemperatureEntryLabel => "MaxGrowthTemperature".Translate().CapitalizeFirst();
     // Keep all StatDrawEntries except those with the growth temperature labels.
 
     private static void Postfix(ref IEnumerable<StatDrawEntry> __result)

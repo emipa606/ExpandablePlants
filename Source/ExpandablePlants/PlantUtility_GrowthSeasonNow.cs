@@ -5,15 +5,16 @@ using Verse;
 
 namespace ExpandablePlants;
 
-[HarmonyPatch(typeof(PlantUtility), "GrowthSeasonNow")]
+[HarmonyPatch(typeof(PlantUtility), nameof(PlantUtility.GrowthSeasonNow), typeof(IntVec3), typeof(Map),
+    typeof(ThingDef))]
 public static class PlantUtility_GrowthSeasonNow
 {
     private static readonly FieldInfo wantedPlantDefField =
         AccessTools.Field(typeof(WorkGiver_Grower), "wantedPlantDef");
 
-    public static bool Prefix(IntVec3 c, Map map, ref bool __result, bool forSowing = false)
+    public static bool Prefix(IntVec3 c, Map map, ref bool __result)
     {
-        if (!IsJobSearching.isJobSearchingNow)
+        if (!IsJobSearching.IsJobSearchingNow)
         {
             return true;
         }

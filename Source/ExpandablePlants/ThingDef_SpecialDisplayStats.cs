@@ -26,8 +26,8 @@ public static class ThingDef_SpecialDisplayStats
         if (compProperties_Plant == null)
         {
             // Regular plants use RimWorld's constant growth temperatures.
-            minGrowthTemperature = RimWorld.Plant.MinGrowthTemperature;
-            maxGrowthTemperature = RimWorld.Plant.MaxGrowthTemperature;
+            minGrowthTemperature = RimWorld.Plant.DefaultMinGrowthTemperature;
+            maxGrowthTemperature = RimWorld.Plant.DefaultMaxGrowthTemperature;
         }
         else
         {
@@ -36,14 +36,13 @@ public static class ThingDef_SpecialDisplayStats
             maxGrowthTemperature = compProperties_Plant.maxGrowthTemperature;
         }
 
-        __result = __result.Concat(new[]
-        {
+        __result = __result.Concat([
             new StatDrawEntry(StatCategoryDefOf.Basics, "MinGrowthTemperature".Translate(),
                 minGrowthTemperature.ToStringTemperature(),
                 "Stat_Thing_Plant_MinGrowthTemperature_Desc".Translate(), 4152),
             new StatDrawEntry(StatCategoryDefOf.Basics, "MaxGrowthTemperature".Translate(),
                 maxGrowthTemperature.ToStringTemperature(),
                 "Stat_Thing_Plant_MaxGrowthTemperature_Desc".Translate(), 4153)
-        });
+        ]);
     }
 }

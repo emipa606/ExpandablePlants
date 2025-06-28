@@ -1,0 +1,8 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Release" />
+  </Configurations>
+  <Project Path="ExpandablePlants/ExpandablePlants.csproj">
+    <BuildType Project="Release" />
+  </Project>
+</Solution>
